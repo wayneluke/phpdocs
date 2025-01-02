@@ -1,0 +1,42 @@
+{% block constant %}
+<a id="constant_{{ constant.name }}"></a>
+###### {% if constant.deprecated %}~~{{ constant.name }}~~{% else %}{{ constant.name }}{% endif %}
+{% if (node.parent is not null and constant.parent.fullyQualifiedStructuralElementName != node.fullyQualifiedStructuralElementName) %}
+Inherited from [{{ constant.parent.fullyQualifiedStructuralElementName }}]({{ link(constant.parent) }})
+{% endif %}
+{% if constant.summary|length > 0 %}
+
+{{ constant.summary }}
+{% endif %}
+
+```
+{{ constant.name }} = {{ constant.value|raw }}{% if not (constant.types is empty) %} : {{ constant.types|join('|') }}{% endif %}
+
+```
+
+{% if constant.description|length > 0 %}
+{{ constant.description }}
+{% endif %}
+{% if constant.deprecated %}
+**deprecated**
+{{ constant.tags.deprecated[0].description }}
+{% endif %}
+{% if constant.tags|length > 0 %}
+{% for tagName,tags in constant.tags if tagName in ['link', 'see'] %}
+{% if loop.first %}
+**See also:**
+
+{% endif %}
+{% for tag in tags %}
+* [{{ tag.description ?: tag.reference }}]({{ tag.reference|route('url') ?: tag.link }})
+{% endfor %}
+{% endfor %}
+{% for tagName,tags in constant.tags if tagName not in ['link', 'see', 'var', 'deprecated', 'uses'] %}
+{% if loop.first %}
+| Tag | Version | Desc |
+|-----|---------|------|
+{% endif %}
+| {{ tagName }} | {% for tag in tags %}{% if tag.version %}{{ tag.version }}{% endif %}{% endfor %} | {% for tag in tags %}{{ tag.description }}{% endfor %} |
+{% endfor %}
+{% endif %}
+{% endblock %}

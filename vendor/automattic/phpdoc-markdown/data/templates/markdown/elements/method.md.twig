@@ -1,0 +1,69 @@
+{% block method %}
+<a id="method_{{ method.name }}"></a>
+### {{ method.name }}
+
+```
+{% if method.deprecated %}(deprecated) - {% endif %}{% if method.final %}final {% endif %}{% if method.static %}static {% endif %}{% if method.abstract %}abstract {% endif %}{{ method.visibility }} {{ method.name }}({% for argument in method.arguments %}{{ argument.types ? argument.types|join('&#124;')~' ' }} {{ argument.isVariadic ? '...' }}{{ argument.name }}{{ argument.default ? ' = '~argument.default }}{% if not loop.last %}, {% endif %}{% endfor %}) {{ method.response.types ? ': '~method.response.types|join('&#124;') }}
+```
+{% if method.summary|length > 0 %}
+
+##### Summary
+
+{{ method.summary }}
+{% endif %}
+{% if method.description|length > 0 %}
+
+##### Description
+
+{{ method.description }}
+{% endif %}
+{% if method.deprecated %}
+**Deprecated**
+Deprecated{% if method.tags.deprecated[0].version %} since {{ method.tags.deprecated[0].version }}{% endif %}
+{{ method.tags.deprecated[0].description }}
+{% endif %}
+{% for tagName,tags in method.tags if tagName in ['link', 'see'] %}
+{% if loop.first %}
+
+##### See Also:
+
+{% endif %}
+{% for tag in tags %}
+ * [{{ tag.reference }}]({{ '../' ~ tag.reference|route('url') }})
+{% endfor %}
+{% endfor %}
+{% if method.arguments|length > 0 %}
+
+##### Parameters:
+
+| Name | Type | Default |
+|------|------|---------|
+{% for argument in method.arguments %}
+| **${{ argument.name }}** | {{ argument.type }} | {{ argument.default }} |
+{% endfor %}
+{% endif %}
+{% if method.tags.throws|length > 0 or method.tags.throw|length > 0 %}
+
+##### Throws:
+
+| Type | Description |
+|------|-------------|
+{% for exception in method.tags.throws %}
+| {{ exception.types|route|join('&#124;')|raw }} | {{ exception.description|raw }} |
+{% endfor %}
+{% for exception in method.tags.throw %}
+| {{ exception.types|route|join('&#124;')|raw }} | {{ exception.description|raw }} |
+{% endfor %}
+{% endif %}
+{% if method.response %}
+
+##### Returns:
+
+```
+{{ method.response.types|route|join('&#124;')|raw }}
+```
+{% if method.response.description is not empty %}
+{{ method.response.description }}
+{% endif %}
+{% endif %}
+{% endblock %}

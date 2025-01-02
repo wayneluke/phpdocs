@@ -1,0 +1,11 @@
+{%  extends 'layout.md.twig' %}
+{%  block title %}{{ project.name|raw }}{% endblock %}
+{% block content %}
+{% set node, url_base = project.namespace, './' %}
+{{ block('table_of_contents') }}
+{% endblock %}
+{% block footer %}
+
+--------
+> This document was automatically generated from source code comments on {{ "now"|date("Y-m-d") }}
+{% endblock %}
