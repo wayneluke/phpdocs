@@ -5,21 +5,34 @@
         xmlns="https://www.phpdoc.org"
         xsi:noNamespaceSchemaLocation="https://docs.phpdoc.org/latest/phpdoc.xsd"
 >
-    <title>vBulletin v5.7.2</title>
+    <title>vBulletin v6.1.0</title>
     <paths>
         <output>./docs</output>
         <cache>./cache</cache>
     </paths>
-    <version number="5.7.2">
+    <version number="6.1.0">
         <api format="php">
-            <source dsn="/volumes/secondary/sites/vbulletin/docs/core/">
+            <source dsn="/volumes/secondary/sites/vbulletin/vb6/core/">
                 <path>vb</path>
             </source>
             <ignore hidden="true" symlinks="true">
-            <!--1 or more repetitions:-->
                 <path>libraries/**/*</path>
+                <path>packages/**/*</path>
             </ignore>
-            <visibility>public</visibility>            
+            <visibility>public</visibility>
+            <default-package-name>vBulletin</default-package-name>
+            <include-source>true</include-source>
+            <markers>
+                <marker>TODO</marker>
+                <marker>FIXME</marker>
+             </markers>
         </api>
+    <guide format="rst">
+      <source dsn=".">
+        <!--1 or more repetitions:-->
+        <path>support</path>
+      </source>
+      <!--Optional:-->
+    </guide>        
     </version>
 </phpdocumentor>
