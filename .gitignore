@@ -2,3 +2,4 @@
 /docs/
 .DS_Store
 *.php
+debug.lock
